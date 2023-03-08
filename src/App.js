@@ -1,25 +1,69 @@
-import logo from './logo.svg';
 import './App.css';
+import { useState, useRef,useEffect } from "react";
+import {Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import Navigation from "./components/navigation/navigation.js";
+import Home from "./pages/home/home.js"
+import Login from "./pages/login/login.js"
+import Profile from "./pages/profile/profile.js"
+import YourMovies from "./pages/yourMovies/yourMovies.js"
+import NoPage from "./pages/noPage/noPage.js"
+import Footer from "./components/footer/footer.js"
 
 function App() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem("currentUser") === null) navigate('/login', { replace: true });
+  }, []);
+  
+  const location = Location();
+  const [data, setData] = useState("");
+  if(useFirstRender()) setData(list)
+
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <>
+    <div className='app-container'>
+      <h1 className='title'>Movie rental</h1>
+      {location && <Navigation/>}
+        <Routes>
+          <Route path="/">
+            <Route path="home" element={<Home data={data}/>} />
+            <Route path="login" element={<Login />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="yourmovies" element={<YourMovies data={data}/>} />
+            <Route path="*" element={<NoPage />} />
+          </Route>
+        </Routes>    
     </div>
+    <Footer/>
+    </>
   );
 }
+
+function useFirstRender() {
+  const ref = useRef(true);
+  const firstRender = ref.current;
+  ref.current = false;
+  return firstRender;
+}
+
+function Location() {
+  const routes = ["/home","/yourmovies","/profile"];
+	const location = useLocation();
+  return routes.includes(location.pathname)
+}
+
+let list = [
+  { name: '9 Songs', genre: 'Action', price: 5.99 , stock: 2, inCart: true, time: 12},
+  { name: 'The Lord of the Rings', genre: 'Action', price: 5.12 , stock: 1, inCart: false, time: 12},
+  { name: 'The Terminator ', genre: 'Action', price: 5.92 , stock: 0, inCart: false, time: 12},
+  { name: 'Cube ', genre: 'Action', price: 5.69 , stock: 1, inCart: false, time: 12},
+  { name: 'The Matrix Reloaded', genre: 'Action', price: 5.52 , stock: 0, inCart: false, time: 12},
+  { name: 'Harold and Maude', genre: 'Action', price: 52.99 , stock: 4, inCart: false, time: 12},
+  { name: 'Back to the Future Part III', genre: 'Action', price: 5.52 , stock: 2, inCart: false, time: 12},
+  { name: 'Amadeus', genre: 'Action', price: 5.39 , stock: 1, inCart: false, time: 12},
+];
 
 export default App;

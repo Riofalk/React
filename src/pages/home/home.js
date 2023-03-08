@@ -3,24 +3,23 @@ import React, { useState } from 'react';
 import notInStockImg from "../../assets/not_available.png"
 import inStockImg from "../../assets/available.png"
 
-function home({data}) {
-  const results = [];
-  data.forEach((film, index) => {
-    let notInStock = !film.stock & !film.inCart ? "not-available": "";
-    let rented = film.inCart && !notInStock ? "rented": "";
-    let classes = `rent-button ${notInStock} ${rented}`;
-    const [stock, setStock] = useState(film.stock);
-    results.push(
-      <tr className="movie-table-tr" key={index}>
-        <td>{film.name}</td>
-        <td>{film.genre}</td>
-        <td>{film.price}$</td>
-        <td>{stock}</td>
-        <td><img src={film.stock ? inStockImg: notInStockImg}></img></td>
-        <td><button className={classes} onClick={() => rent(film, setStock)}>Rent</button></td>
-      </tr>,
-    );
-  });
+function home({ data, setData }) {
+  const rent = (film) => {
+    console.log(film)
+    if(!film.stock & !film.inCart) return 
+
+    const newData = [ ...data ]
+    const newFilm = newData.find((item) => item.id === film.id)
+
+    if (newFilm.inCart) {
+      newFilm.stock++
+      setData(newData)
+    } else {
+      newFilm.stock--
+      setData(newData)
+    }
+  }
+
   return (
     <>
       <div className="home-container">
@@ -37,23 +36,26 @@ function home({data}) {
             </tr>
           </thead>
           <tbody className="movie-table-body">
-            {results}
+            {data && data.map((film, index) => {
+              let notInStock = !film.stock && !film.inCart ? "not-available": "";
+              let rented = film.inCart && !notInStock ? "rented": "";
+              let classes = `rent-button ${notInStock} ${rented}`;
+
+              return (
+                <tr className="movie-table-tr" key={index}>
+                  <td>{film.name}</td>
+                  <td>{film.genre}</td>
+                  <td>{film.price}$</td>
+                  <td>{film.stock}</td>
+                  <td><img src={film.stock <= 0 ? notInStockImg: inStockImg} alt=""></img></td>
+                  <td><button className={classes} onClick={() => rent(film)}>Rent</button></td>
+                </tr>
+            )})}
           </tbody>
         </table>
       </div>  
     </>
   );
-}
-
-function rent(film, setStock) {
-  if(!film.stock & !film.inCart) return 
-  if (film.inCart) {
-    film.inCart = false;
-    setStock(++film.stock);
-  } else {
-    film.inCart = true;
-    setStock(--film.stock);
-  }
 }
 
 export default home;

@@ -1,5 +1,5 @@
 import './App.css';
-import { useState, useRef,useEffect } from "react";
+import { useState,useEffect } from "react";
 import {Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import Navigation from "./components/navigation/navigation.js";
 import Home from "./pages/home/home.js"
@@ -34,7 +34,7 @@ function App() {
     if (localStorage.getItem("currentUser") === null) {
       navigate('/login', { replace: true })
     }
-  });
+  }, []);
   
   // if(useFirstRender()) setData(list)
   const checkIfLoggedIn = () => {

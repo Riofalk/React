@@ -4,9 +4,6 @@ import "./forms.css";
 function LoginForm() {
   const navigate = useNavigate();
 
-  const redirect = () => {
-    navigate("/home");
-  };
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -19,7 +16,8 @@ function LoginForm() {
     if (foundUser !== undefined && foundUser.password === password) {
       localStorage.setItem("currentUser", JSON.stringify(foundUser));
     }
-    redirect();
+    
+    navigate("/home");
   };
 
   return (

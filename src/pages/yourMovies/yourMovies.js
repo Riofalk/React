@@ -83,6 +83,8 @@ function CreatTimeElement({film}) {
   );
 }
 
+
+
 function incrTime(time, film) {
   time = parseInt(time);
   if (time >= 168) return time;

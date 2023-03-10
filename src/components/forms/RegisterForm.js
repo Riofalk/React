@@ -117,7 +117,7 @@ function RegisterForm() {
         </label>
         <label htmlFor="passwordAgain">
           Password again
-          <input className="main-input" type="password" name="passwordAgain" />
+          <input className="main-input" type="password" name="passwordAgain" onBlur={() => console.log('out')}/>
         </label>
         <div className="button-container">
           <button className="sign-in">Register</button>

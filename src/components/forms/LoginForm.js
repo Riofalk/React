@@ -1,54 +1,50 @@
-import { Component } from "react";
+import { useNavigate } from "react-router-dom";
 import "./forms.css";
 
-class LoginForm extends Component {
-  handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(e.target.email.value);
+function LoginForm() {
+  const navigate = useNavigate();
 
-    if (!e.target.email.value) {
-      alert("Email is required");
-    } else if (!e.target.email.value) {
-      alert("Valid email is required");
-    } else if (!e.target.password.value) {
-      alert("Password is required");
-    } else if (
-      e.target.email.value === "me@example.com" &&
-      e.target.password.value === "123456"
-    ) {
-      alert("Successfully logged in");
-      e.target.email.value = "";
-      e.target.password.value = "";
-    } else {
-      alert("Wrong email or password combination");
+  const redirect = () => {
+    navigate("/home");
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    let email = e.target.email.value;
+    let password = e.target.password.value;
+    let allUsers = JSON.parse(localStorage.getItem("users"));
+
+    let foundUser = allUsers.find((user) => user.email === email);
+
+    if (foundUser !== undefined && foundUser.password === password) {
+      localStorage.setItem("currentUser", JSON.stringify(foundUser));
     }
+    redirect();
   };
 
-  render() {
-    return (
-      <div className="sign-in-container">
-        <form className="form" onSubmit={this.handleSubmit}>
-          <label htmlFor="email">
-            Email
-            <input
-              className="main-input"
-              type="email"
-              name="email"
-              placeholder="email@accenture.com"
-            />
-          </label>
+  return (
+    <div className="sign-in-container">
+      <form className="form" onSubmit={handleSubmit}>
+        <label htmlFor="email">
+          Email
+          <input
+            className="main-input"
+            type="email"
+            name="email"
+            placeholder="email@accenture.com"
+          />
+        </label>
 
-          <label htmlFor="password">
-            Password
-            <input className="main-input" type="password" name="password" />
-          </label>
-          <div className="button-container">
-            <button className="sign-in">Sign in</button>
-          </div>
-        </form>
-      </div>
-    );
-  }
+        <label htmlFor="password">
+          Password
+          <input className="main-input" type="password" name="password" />
+        </label>
+        <div className="button-container">
+          <button className="sign-in">Sign in</button>
+        </div>
+      </form>
+    </div>
+  );
 }
 
 export default LoginForm;

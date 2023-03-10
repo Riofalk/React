@@ -1,9 +1,7 @@
-import { Component, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./forms.css";
 
 function RegisterForm() {
-  
   const navigate = useNavigate();
 
   const redirect = () => {
@@ -20,6 +18,11 @@ function RegisterForm() {
     let password = e.target.password.value;
     let passwordAgain = e.target.passwordAgain.value;
 
+    let allUsers =
+      JSON.parse(localStorage.getItem("users")) == null
+        ? []
+        : JSON.parse(localStorage.getItem("users"));
+
     let registartionInfo = {
       name: name.charAt(0).toUpperCase() + name.slice(1),
       sname: surname.charAt(0).toUpperCase() + surname.slice(1),
@@ -27,26 +30,44 @@ function RegisterForm() {
       password: password,
     };
 
-    if (e.target.name.value.length < 2) {
-      alert("Name is required");
+    if (name.length < 2) {
+      alert("Invalid name");
       return;
     }
 
-    if (!e.target.email.value) {
+    if (surname.length < 2 && surname.length !== 0) {
+      alert("Invalid surname");
+      return;
+    }
+
+    if (allUsers?.find((e) => e.email === email)) {
+      alert("Email is already taken");
+      return;
+    }
+
+    if (!email) {
       alert("Email is required");
       return;
     }
 
-    if (!e.target.email.value) {
-      alert("Valid email is required");
+    if (!(emailAgain === email)) {
+      alert("Emails aren't matching");
       return;
     }
 
-    if (!e.target.password.value) {
-      alert("Password is required");
+    if (!password || password.length < 6) {
+      alert("invalid password/ Password is required");
       return;
     }
+
+    if (password !== passwordAgain) {
+      alert("Passwords don't match");
+      return;
+    }
+
     localStorage.setItem("currentUser", JSON.stringify(registartionInfo));
+    allUsers.push(registartionInfo);
+    localStorage.setItem("users", JSON.stringify(allUsers));
     redirect();
   };
 

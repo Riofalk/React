@@ -49,7 +49,7 @@ function App() {
             <Route path="home" element={<Home data={data} setData={setData} />} />
             <Route path="login" element={<Login />} />
             <Route path="profile" element={<Profile />} />
-            <Route path="yourmovies" element={<YourMovies data={data}/>} />
+            <Route path="yourmovies" element={<YourMovies data={data} setData={setData}/>} />
             <Route path="*" element={<NoPage />} />
           </Route>
         </Routes>    

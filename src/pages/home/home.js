@@ -13,9 +13,11 @@ function home({ data, setData }) {
 
     if (newFilm.inCart) {
       newFilm.stock++
+      newFilm.inCart = false;
       setData(newData)
     } else {
       newFilm.stock--
+      newFilm.inCart = true;
       setData(newData)
     }
   }

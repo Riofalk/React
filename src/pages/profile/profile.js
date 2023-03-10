@@ -39,6 +39,13 @@ function resetEmail(currentUser, setEmail) {
         resetEmail(currentUser, setEmail)  
         return   
     }
+    
+    let allUsers = JSON.parse(localStorage.getItem("users"));
+    console.log(allUsers)
+    let foundUser = allUsers?.find((user) => user.email === currentUser.email);
+
+
+
     setEmail(newEmail);
     localStorage.removeItem(currentUser.email)
     localStorage.setItem("currentUser", JSON.stringify(currentUser = {...currentUser, email: newEmail}))

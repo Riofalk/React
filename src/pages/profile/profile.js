@@ -41,15 +41,11 @@ function resetEmail(currentUser, setEmail) {
     }
     
     let allUsers = JSON.parse(localStorage.getItem("users"));
-    console.log(allUsers)
     let foundUser = allUsers?.find((user) => user.email === currentUser.email);
-
-
-
+    foundUser.email = newEmail;
     setEmail(newEmail);
-    localStorage.removeItem(currentUser.email)
     localStorage.setItem("currentUser", JSON.stringify(currentUser = {...currentUser, email: newEmail}))
-    localStorage.setItem(newEmail, currentUser.password)
+    localStorage.setItem("users", JSON.stringify(allUsers))
 }
 
 export default Profile;

@@ -27,11 +27,14 @@ function App() {
   const [data, setData] = useState("");
 
   useEffect(() => {
-    if (localStorage.getItem("currentUser") === null) {
-      navigate('/login', { replace: true })
-    };
     setData(list) 
   }, []);
+
+  useEffect(() => {
+    if (localStorage.getItem("currentUser") === null) {
+      navigate('/login', { replace: true })
+    }
+  });
   
   // if(useFirstRender()) setData(list)
   const checkIfLoggedIn = () => {

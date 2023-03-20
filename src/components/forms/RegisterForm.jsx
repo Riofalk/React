@@ -28,6 +28,7 @@ function RegisterForm() {
       sname: surname.charAt(0).toUpperCase() + surname.slice(1),
       email: email,
       password: password,
+      moviesInTheCart: [],
     };
 
     if (name.length < 2) {

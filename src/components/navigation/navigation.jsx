@@ -19,8 +19,14 @@ function navigation() {
     );
   }
 
-  function logOut() {
+function logOut() {
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    let allUsers = JSON.parse(localStorage.getItem("users"));
     localStorage.removeItem("currentUser");
+    const allUserData = [...allUsers]
+    const targetUser = allUserData.find((user) => user.email === currentUser.email)
+    targetUser.moviesInTheCart = currentUser.moviesInTheCart;
+    localStorage.setItem("users", JSON.stringify(allUserData))  
   }
   
   export default navigation;

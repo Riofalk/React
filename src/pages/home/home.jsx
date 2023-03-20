@@ -5,21 +5,25 @@ import inStockImg from "../../assets/available.png"
 
 function home({ data, setData }) {
   const rent = (film) => {
-    console.log(film)
-    if(!film.stock & !film.inCart) return 
+    let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    let currentUserFilms = currentUser.moviesInTheCart
+    const index = currentUserFilms.findIndex(element => element.id === film.id)
+
+    if(film.stock === 0 && index === -1) return 
 
     const newData = [ ...data ]
     const newFilm = newData.find((item) => item.id === film.id)
-
-    if (newFilm.inCart) {
+    if (index !== -1) {
       newFilm.stock++
-      newFilm.inCart = false;
-      setData(newData)
+      const index = currentUserFilms.findIndex(element => element.id === film.id)
+      currentUserFilms = currentUserFilms.splice(index, 1)
     } else {
       newFilm.stock--
-      newFilm.inCart = true;
-      setData(newData)
+      film.time = 12;
+      currentUserFilms.push(film)  
     }
+    localStorage.setItem("currentUser", JSON.stringify(currentUser, {moviesInTheCart: currentUserFilms}))
+    setData(newData)
   }
 
   return (
@@ -39,8 +43,10 @@ function home({ data, setData }) {
           </thead>
           <tbody className="movie-table-body">
             {data && data.map((film, index) => {
-              let notInStock = !film.stock && !film.inCart ? "not-available": "";
-              let rented = film.inCart && !notInStock ? "rented": "";
+              let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+              const filmIndex = currentUser.moviesInTheCart.findIndex(element => element.id === film.id)
+              let notInStock = !film.stock && filmIndex === -1 ? "not-available": "";
+              let rented = filmIndex !== -1 && !notInStock ? "rented": "";
               let classes = `rent-button ${notInStock} ${rented}`;
 
               return (
